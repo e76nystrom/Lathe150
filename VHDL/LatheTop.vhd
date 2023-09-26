@@ -1,9 +1,13 @@
-library IEEE;
+library ieee;
+
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 library neorv32;
 use neorv32.neorv32_package.all;
+
+use work.ExtDataRec.all;
+use work.IORecord.all;
 
 entity LatheTop is
  generic (CLOCK_FREQUENCY   : natural := 50000000;  -- clock frequency of clk_i in Hz
@@ -67,110 +71,91 @@ end LatheTop;
 
 architecture Behavioral of LatheTop is
 
- -- component neorv32_test_on_chip_debugger is
- --  generic (
- --   -- adapt these for your setup --
- --   CLOCK_FREQUENCY   : natural;  -- clock frequency of clk_i in Hz
- --   MEM_INT_IMEM_SIZE : natural;   -- size of processor-internal instruction memory in bytes
- --   MEM_INT_DMEM_SIZE : natural
- --   );
- --  port (
- --   -- Global control --
- --   clk_i       : in  std_ulogic; -- global clock, rising edge
- --   rstn_i      : in  std_ulogic; -- global reset, low-active, async
- --   -- JTAG on-chip debugger interface --
- --   jtag_trst_i : in  std_ulogic; -- low-active TAP reset (optional)
- --   jtag_tck_i  : in  std_ulogic; -- serial clock
- --   jtag_tdi_i  : in  std_ulogic; -- serial data input
- --   jtag_tdo_o  : out std_ulogic; -- serial data output
- --   jtag_tms_i  : in  std_ulogic; -- mode select
- --   -- GPIO --
- --   gpio_o      : out std_ulogic_vector(7 downto 0); -- parallel output
- --   -- UART0 --
- --   uart0_txd_o : out std_ulogic; -- UART0 send data
- --   uart0_rxd_i : in  std_ulogic  -- UART0 receive data
- --   );
- -- end Component;
+ attribute syn_keep : boolean;
+ attribute syn_keep of led   : signal is true;
+ attribute syn_keep of dbg   : signal is true;
+ attribute syn_keep of anode : signal is true;
+ attribute syn_keep of seg   : signal is true;
 
- -- component LatheNew is
- --  generic (ledPins : positive;
- --           dbgPins : positive);
- --  port (
- --   sysClk   : in std_logic;
+ attribute syn_keep of dclk : signal is true;
+ attribute syn_keep of dout : signal is true;
+ attribute syn_keep of din  : signal is true;
+ attribute syn_keep of dsel : signal is true;
 
- --   led      : out std_logic_vector(ledPins-1 downto 0);
- --   dbg      : out std_logic_vector(dbgPins-1 downto 0);
- --   anode    : out std_logic_vector(3 downto 0);
- --   seg      : out std_logic_vector(6 downto 0);
+ attribute syn_keep of ain    : signal is true;
+ attribute syn_keep of bin    : signal is true;
+ attribute syn_keep of syncin : signal is true;
 
- --   dclk     : in std_logic;
- --   dout     : out std_logic;
- --   din      : in std_logic;
- --   dsel     : in std_logic;
+ attribute syn_keep of zDro : signal is true;
+ attribute syn_keep of xDro : signal is true;
+ attribute syn_keep of zMpg : signal is true;
+ attribute syn_keep of xMpg : signal is true;
 
- --   aIn      : in std_logic;
- --   bIn      : in std_logic;
- --   syncIn   : in std_logic;
+ attribute syn_keep of pinIn  : signal is true;
+ attribute syn_keep of aux    : signal is true;
+ attribute syn_keep of pinOut : signal is true;
+ attribute syn_keep of extOut : signal is true;
+ attribute syn_keep of bufOut : signal is true;
 
- --   zDro     : in std_logic_vector(1 downto 0);
- --   xDro     : in std_logic_vector(1 downto 0);
- --   zMpg     : in std_logic_vector(1 downto 0);
+ attribute syn_keep of zDoneInt : signal is true;
+ attribute syn_keep of xDoneInt : signal is true;
 
- --   xMpg     : in std_logic_vector(1 downto 0);
+ attribute syn_keep of jtag_trst_i : signal is true;
+ attribute syn_keep of jtag_tck_i  : signal is true;
+ attribute syn_keep of jtag_tdo_o  : signal is true;
+ attribute syn_keep of jtag_tms_i  : signal is true;
+ attribute syn_keep of jtag_tdi_i  : signal is true;
 
- --   pinIn    : in std_logic_vector(4 downto 0);
+ attribute syn_keep of dbg_txd_o : signal is true;
+ attribute syn_keep of dbg_rxd_i : signal is true;
 
- --   -- aux      : out std_logic_vector(7 downto 0);
- --   pinOut   : out std_logic_vector(11 downto 0);
- --   extOut   : out std_logic_vector(2 downto 0);
+ signal sysClkOut  : std_logic;
 
- --   bufOut   : out std_logic_vector(3 downto 0);
+ signal con_gpio_o : std_ulogic_vector(63 downto 0) := (others => '0');
 
- --   zDoneInt : out std_logic;
- --   xDoneInt : out std_logic
- --   );
- -- end Component;
+ signal cfs_in_i   : std_ulogic_vector(32-1 downto 0) := (others => '0');
+ signal cfs_out_o  : std_ulogic_vector(32-1 downto 0) := (others => '0');
 
- signal con_gpio_o : std_ulogic_vector(63 downto 0);
+ signal cfs_re_o   : std_ulogic := '0';
+ signal cfs_we_o   : std_ulogic := '0';
+ signal cfs_reg_o  : std_ulogic_vector(1 downto 0) := (others => '0');
 
- signal cfs_in_i   : std_ulogic_vector(32-1 downto 0);
- signal cfs_out_o  : std_ulogic_vector(32-1 downto 0);
-
- signal cfs_re_o   : std_ulogic;
- signal cfs_we_o   : std_ulogic;
- signal cfs_reg_o  : std_ulogic_vector(1 downto 0);
+ signal latheData  : ExtDataRcv;
+ signal latheCtl   : ExtDataCtl;
 
 begin
+
+ pllClock : entity work.Clock
+  port map ( 
+   clockIn  => sysClk,
+   clockOut => sysClkOut
+   ); 
 
  neorv32_top_inst: neorv32_top
   generic map (
    -- General --
-   CLOCK_FREQUENCY              => CLOCK_FREQUENCY,   -- clock frequency of clk_i in Hz
-   INT_BOOTLOADER_EN            => true,              -- boot configuration: true = boot explicit bootloader; false = boot from int/ext (I)MEM
+   CLOCK_FREQUENCY              => CLOCK_FREQUENCY,
+   INT_BOOTLOADER_EN            => true,
    -- On-Chip Debugger (OCD) --
-   ON_CHIP_DEBUGGER_EN          => true,              -- implement on-chip debugger
+   ON_CHIP_DEBUGGER_EN          => true,
    -- RISC-V CPU Extensions --
-   CPU_EXTENSION_RISCV_C        => true,              -- implement compressed extension?
-   CPU_EXTENSION_RISCV_M        => true,              -- implement mul/div extension?
-   CPU_EXTENSION_RISCV_Zicntr   => true,              -- implement base counters?
-   CPU_EXTENSION_RISCV_Zifencei => true,              -- implement instruction stream sync.? (required for the on-chip debugger)
-   -- Tuning Options --
-   --CPU_IPB_ENTRIES              => 2,                 -- entries in instruction prefetch buffer, has to be a power of 2, min 1
+   CPU_EXTENSION_RISCV_C        => true,
+   CPU_EXTENSION_RISCV_M        => true,
+   CPU_EXTENSION_RISCV_Zicntr   => true,
+   CPU_EXTENSION_RISCV_Zifencei => true,
    -- Internal Instruction memory --
-   MEM_INT_IMEM_EN              => true,              -- implement processor-internal instruction memory
-   MEM_INT_IMEM_SIZE            => MEM_INT_IMEM_SIZE, -- size of processor-internal instruction memory in bytes
+   MEM_INT_IMEM_EN              => true,
+   MEM_INT_IMEM_SIZE            => MEM_INT_IMEM_SIZE,
    -- Internal Data memory --
-   MEM_INT_DMEM_EN              => true,              -- implement processor-internal data memory
-   MEM_INT_DMEM_SIZE            => MEM_INT_DMEM_SIZE, -- size of processor-internal data memory in bytes
+   MEM_INT_DMEM_EN              => true,
+   MEM_INT_DMEM_SIZE            => MEM_INT_DMEM_SIZE,
    -- Processor peripherals --
-   IO_GPIO_NUM                  => 8,                 -- number of GPIO input/output pairs (0..64)
-   IO_MTIME_EN                  => true,              -- implement machine system timer (MTIME)?
-   IO_UART0_EN                  => true               -- implement primary universal asynchronous receiver/transmitter (UART0)?
+   IO_GPIO_NUM                  => 8,
+   IO_MTIME_EN                  => true,
+   IO_UART0_EN                  => true
    )
   port map (
-
-   -- clk_i       => clk_i,
-   clk_i       => sysClk,
+   clk_i       => sysClkOut,
    rstn_i      => rstn_i,
 
    cfs_in_i    => cfs_in_i,
@@ -190,17 +175,32 @@ begin
 
    uart0_txd_o => dbg_txd_o,
    uart0_rxd_i => dbg_rxd_i
-
    );
 
  -- GPIO output --
  aux <= con_gpio_o(7 downto 0); 
 
- latheNew0: entity work.LatheNew
+ interfaceProc : entity work.CFSInterface
+ generic map (lenBits  => 8,
+              dataBits => 32)
+ port map (
+  clk        => sysClkOut,
+  re         => cfs_re_o,
+  we         => cfs_we_o,
+  reg        => cfs_reg_o,
+  
+  CFSDataIn  => cfs_out_o,
+  CFSDataOut => cfs_in_i,
+
+  latheData  => latheData,
+  latheCtl   => latheCtl
+  );
+
+ latheInt: entity work.LatheInterface
   generic map (ledPins => ledPins,
                dbgPins => dbgPins)
   port map (
-   sysClk   => sysClk,
+   sysClk   => sysClkOut,
 
    led      => led,
    dbg      => dbg,
@@ -229,6 +229,9 @@ begin
    extOut   => extOut,
 
    bufOut   => bufOut,
+
+   latheData => latheData,
+   latheCtl  => latheCtl,
 
    zDoneInt => zDoneInt,
    xDoneInt => xDoneInt

@@ -428,10 +428,16 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to pinIn[2]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to pinIn[3]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to pinIn[4]
 
-set_global_assignment -name SDC_FILE Lathe150.sdc
+set_global_assignment -name VHDL_FILE ../LatheNew/VHDL/ExtDataRec.vhd
+set_global_assignment -name VHDL_FILE ../LatheNew/VHDL/IORecord.vhd
+set_global_assignment -name VHDL_FILE ../LatheNew/VHDL/FpgaLatheRec.vhd
+set_global_assignment -name VHDL_FILE ../LatheNew/VHDL/LatheInterface.vhd
+set_global_assignment -name VHDL_FILE ../LatheNew/VHDL/FpgaLatheFunc.vhd
+set_global_assignment -name VHDL_FILE ../LatheNew/VHDL/LatheCtl.vhd
 set_global_assignment -name VHDL_FILE VHDL/Interface.vhd
 set_global_assignment -name VHDL_FILE VHDL/LatheTop.vhd
 set_global_assignment -name VHDL_FILE VHDL/neorv32.vhd
+set_global_assignment -name SDC_FILE Lathe150.sdc
 set_global_assignment -name QSYS_FILE ../LatheNew/Proj/SystemClk.qsys
 set_global_assignment -name QIP_FILE ../LatheNew/Proj/CmpTmrMem2.qip
 set_global_assignment -name QIP_FILE ../LatheNew/Proj/Multiplier.qip
@@ -447,7 +453,6 @@ set_global_assignment -name VHDL_FILE ../LatheNew/VHDL/DisplayCtl.vhd
 set_global_assignment -name VHDL_FILE ../LatheNew/VHDL/ClockEnaN.vhd
 set_global_assignment -name VHDL_FILE ../LatheNew/VHDL/ClockA.vhd
 set_global_assignment -name VHDL_FILE ../LatheNew/VHDL/ShiftOutNS.vhd
-set_global_assignment -name VHDL_FILE ../LatheNew/VHDL/ShiftOut.vhd
 set_global_assignment -name VHDL_FILE ../LatheNew/VHDL/PhaseCounter.vhd
 set_global_assignment -name VHDL_FILE ../LatheNew/VHDL/IndexClocks.vhd
 set_global_assignment -name VHDL_FILE ../LatheNew/VHDL/Conversion.vhd
@@ -462,18 +467,15 @@ set_global_assignment -name VHDL_FILE ../LatheNew/VHDL/FreqGenCtr.vhd
 set_global_assignment -name VHDL_FILE ../LatheNew/VHDL/CtlReg.vhd
 set_global_assignment -name VHDL_FILE ../LatheNew/VHDL/ShiftOutN.vhd
 set_global_assignment -name VHDL_FILE ../LatheNew/VHDL/Jog.vhd
-set_global_assignment -name VHDL_FILE ../LatheNew/VHDL/Common.vhd
 set_global_assignment -name VHDL_FILE ../LatheNew/VHDL/Controller.vhd
 set_global_assignment -name VHDL_FILE ../LatheNew/VHDL/ShiftOpLoad.vhd
 set_global_assignment -name VHDL_FILE ../LatheNew/VHDL/ShiftOp.vhd
 set_global_assignment -name VHDL_FILE ../LatheNew/VHDL/RegDef.vhd
 set_global_assignment -name VHDL_FILE ../LatheNew/VHDL/FpgaLatheBits.vhd
-set_global_assignment -name VHDL_FILE ../LatheNew/VHDL/DebugRecord.vhd
-set_global_assignment -name VHDL_FILE ../LatheNew/VHDL/LatheNew.vhd
 set_global_assignment -name VHDL_FILE ../LatheNew/VHDL/Axis.vhd
 set_global_assignment -name VHDL_FILE ../LatheNew/VHDL/SyncAccelDistJog.vhd
 set_global_assignment -name VHDL_FILE ../../../neorv32/rtl/core/neorv32_boot_rom.vhd -library neorv32
-set_global_assignment -name VHDL_FILE ../../../neorv32/rtl/core/neorv32_cfs.vhd -library neorv32
+set_global_assignment -name VHDL_FILE ../LatheNewRiscV/VHDL/neorv32_cfs.vhd -library neorv32
 set_global_assignment -name VHDL_FILE ../../../neorv32/rtl/core/neorv32_cpu.vhd -library neorv32
 set_global_assignment -name VHDL_FILE ../../../neorv32/rtl/core/neorv32_cpu_alu.vhd -library neorv32
 set_global_assignment -name VHDL_FILE ../../../neorv32/rtl/core/neorv32_cpu_control.vhd -library neorv32

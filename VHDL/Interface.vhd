@@ -1,28 +1,27 @@
-library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
+library ieee;
 
-use IEEE.NUMERIC_STD.ALL;
-use IEEE.std_logic_arith;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+use ieee.std_logic_arith;
+
+use work.RegDef.all;
+use work.IORecord.all;
+use work.ExtDataRec.all;
 
 entity CFSInterface is
- generic (opBits   : positive := 8;
-          lenBits  : positive := 8;
+ generic (lenBits  : positive := 8;
           dataBits : positive := 32);
  port (
   clk     : in std_logic;               --clock
   re      : in std_ulogic;              --read request
   we      : in std_ulogic;              --write request
-  reg     : in std_logic_vector(1 downto 0); --register number
+  reg     : in std_ulogic_vector(1 downto 0); --register number
 
   CFSdataIn  : in  std_ulogic_vector(31 downto 0); --cfs data in
   CFSdataOut : out std_ulogic_vector(31 downto 0); --cfs ddata out
 
-  op         : out unsigned(opBits-1 downto 0); --register number
-  dIn        : in  std_logic;           --input data
-  shift      : out std_logic := '0';    --shift data
-  copy       : out std_logic := '0';    --copy input data
-  load       : out std_logic := '0';    --load output data
-  dOut       : out std_logic := '0'     --output data
+  latheData  : in  ExtDataRcv;          --input data
+  latheCtl   : out ExtDataCtl           --control data
   );
 end CFSInterface;
 
@@ -45,7 +44,7 @@ architecture Behavorial of CFSInterface is
 
 begin
 
- dOut <= dataOut(dataBits-1);
+ latheCtl.dSnd <= dataOut(dataBits-1);
 
  data: process(clk)
  begin
@@ -53,8 +52,8 @@ begin
    if (we = '1') then                   --if write
     case reg  is                        --select operatin
      when "11" =>                       --if load op register
-      op <= unsigned(CFSDataIn(opBits-1 downto 0)); --set op register
-      if (CFSDataIn(opBits) = '0') then
+      latheCtl.op <= unsigned(CFSDataIn(opb-1 downto 0)); --set op register
+      if (CFSDataIn(opb) = '0') then
        send <= '1';
       else
        recv <= '1';
@@ -62,6 +61,9 @@ begin
 
      when "01" =>                       --if data out
       dataOut <= std_logic_vector(CFSDataIn); --load data out register
+
+     when "00" =>
+      latheCtl.active <= cfsDataIn(0);
 
      when others => null;
     end case;
@@ -80,7 +82,7 @@ begin
     when sIdle =>                       --idle
      if (send = '1') then
       sCount <= to_unsigned(dataBits, lenBits);
-      shift <= '1';
+      latheCtl.shift <= '1';
       sendState <= sSend;
      end if;
 
@@ -89,15 +91,15 @@ begin
       sCount <= sCount - 1;
       dataOut <= dataOut(dataBits-2 downto 0) & dataOut(dataBits-1);
      else
-      shift <= '0';
-      load <= '1';
+      latheCtl.shift <= '0';
+      latheCtl.load <= '1';
       sendState <= sLoad;
      end if;
 
     when sLoad =>                       --load data
-     load <= '0';
+     latheCtl.load <= '0';
      send <= '0';
-     op <= (others => '0');
+     latheCtl.op <= (others => '0');
      sendState <= sIdle;
 
     when others =>
@@ -107,24 +109,24 @@ begin
    case recvState is
     when rIdle =>
      if (recv = '1') then
-      copy <= '1';
+      latheCtl.copy <= '1';
       recvState <= rCopy;
      end if;
 
     when rCopy =>
-     copy <= '0';
+     latheCtl.copy <= '0';
      rCount <= to_unsigned(dataBits, lenBits);
-     shift <= '1';
+     latheCtl.shift <= '1';
      recvState <= rRecv;
 
     when rRecv =>
      if (rCount /= 0) then
       rCount <= rCount - 1;
-      dataIn <=  dataIn(dataBits-2 downto 0) & dIn;
+      dataIn <=  dataIn(dataBits-2 downto 0) & latheData.data;
      else
-      shift <= '0';
-      recv = '0';
-      op <= (others => '0');
+      latheCtl.shift <= '0';
+      recv <= '0';
+      latheCtl.op <= (others => '0');
       recvState <= rIdle;
      end if;
    end case;
