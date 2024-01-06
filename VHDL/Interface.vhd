@@ -18,10 +18,10 @@ entity CFSInterface is
   reg     : in std_ulogic_vector(1 downto 0); --register number
 
   CFSdataIn  : in  std_ulogic_vector(31 downto 0); --cfs data in
-  CFSdataOut : out std_ulogic_vector(31 downto 0); --cfs ddata out
+  CFSdataOut : out std_ulogic_vector(31 downto 0) := (others => '0'); --cfs ddata out
 
   latheData  : in  ExtDataRcv;          --input data
-  latheCtl   : out ExtDataCtl           --control data
+  latheCtl   : out ExtDataCtl := extDataCtlInit --control data
   );
 end CFSInterface;
 
@@ -33,24 +33,29 @@ architecture Behavorial of CFSInterface is
  type recvFSM is (rIdle, rCopy, rRecv);
  signal recvState : recvFSM := rIdle;
 
- signal sCount  : unsigned(lenBits-1 downto 0);
- signal rCount  : unsigned(lenBits-1 downto 0);
+ signal sCount  : unsigned(lenBits-1 downto 0) := (others => '0');
+ signal rCount  : unsigned(lenBits-1 downto 0) := (others => '0');
 
- signal dataOut : std_logic_vector(dataBits-1 downto 0);
- signal dataIn  : std_logic_vector(dataBits-1 downto 0);
+ signal dataOut : std_logic_vector(dataBits-1 downto 0) := (others => '0');
+ signal dataIn  : std_logic_vector(dataBits-1 downto 0) := (others => '0');
 
  signal send    : std_logic := '0';
  signal recv    : std_logic := '0';
 
 begin
 
- latheCtl.dSnd <= dataOut(dataBits-1);
 
  data: process(clk)
- begin
+  begin
   if (rising_edge(clk)) then            --if clock active
    if (we = '1') then                   --if write
     case reg  is                        --select operatin
+     when "01" =>
+      latheCtl.active <= cfsDataIn(0);
+
+     when "10" =>                       --if data out
+      dataOut <= std_logic_vector(CFSDataIn); --load data out register
+
      when "11" =>                       --if load op register
       latheCtl.op <= unsigned(CFSDataIn(opb-1 downto 0)); --set op register
       if (CFSDataIn(opb) = '0') then
@@ -59,19 +64,13 @@ begin
        recv <= '1';
       end if;
 
-     when "01" =>                       --if data out
-      dataOut <= std_logic_vector(CFSDataIn); --load data out register
-
-     when "00" =>
-      latheCtl.active <= cfsDataIn(0);
-
      when others => null;
     end case;
    end if;
 
    if (re = '1') then                   --if read
     case reg  is                        --select operatin
-     when "11" =>                       --if read
+     when "10" =>                       --if read
       CFSDataOut <= std_ulogic_vector(dataIn); --read data register
 
      when others => null;
@@ -90,6 +89,7 @@ begin
      if (sCount /= 0) then
       sCount <= sCount - 1;
       dataOut <= dataOut(dataBits-2 downto 0) & dataOut(dataBits-1);
+      latheCtl.dSnd <= dataOut(dataBits-1);
      else
       latheCtl.shift <= '0';
       latheCtl.load <= '1';
@@ -115,7 +115,7 @@ begin
 
     when rCopy =>
      latheCtl.copy <= '0';
-     rCount <= to_unsigned(dataBits, lenBits);
+     rCount <= to_unsigned(dataBits-1, lenBits);
      latheCtl.shift <= '1';
      recvState <= rRecv;
 

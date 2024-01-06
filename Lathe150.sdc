@@ -39,7 +39,7 @@ set_time_format -unit ns -decimal_places 3
 # Create Clock
 #**************************************************************
 
-# create_clock -name {altera_reserved_tck} -period 100.000 -waveform { 0.000 50.000 } [get_ports {altera_reserved_tck}]
+#create_clock -name {altera_reserved_tck} -period 100.000 -waveform { 0.000 50.000 } [get_ports {altera_reserved_tck}]
 create_clock -name {sysClk} -period 20.000 -waveform { 0.000 10.000 } [get_ports {sysClk}]
 
 
@@ -62,10 +62,10 @@ set_clock_latency -source   2.000 [get_clocks {sysClk}]
 # Set Clock Uncertainty
 #**************************************************************
 
-# set_clock_uncertainty -rise_from [get_clocks {altera_reserved_tck}] -rise_to [get_clocks {altera_reserved_tck}]  0.500  
-# set_clock_uncertainty -rise_from [get_clocks {altera_reserved_tck}] -fall_to [get_clocks {altera_reserved_tck}]  0.500  
-# set_clock_uncertainty -fall_from [get_clocks {altera_reserved_tck}] -rise_to [get_clocks {altera_reserved_tck}]  0.500  
-# set_clock_uncertainty -fall_from [get_clocks {altera_reserved_tck}] -fall_to [get_clocks {altera_reserved_tck}]  0.500  
+set_clock_uncertainty -rise_from [get_clocks {altera_reserved_tck}] -rise_to [get_clocks {altera_reserved_tck}]  0.500  
+set_clock_uncertainty -rise_from [get_clocks {altera_reserved_tck}] -fall_to [get_clocks {altera_reserved_tck}]  0.500  
+set_clock_uncertainty -fall_from [get_clocks {altera_reserved_tck}] -rise_to [get_clocks {altera_reserved_tck}]  0.500  
+set_clock_uncertainty -fall_from [get_clocks {altera_reserved_tck}] -fall_to [get_clocks {altera_reserved_tck}]  0.500  
 # set_clock_uncertainty -rise_from [get_clocks {sys_clk}] -rise_to [get_clocks {sys_clk}]  0.100  
 # set_clock_uncertainty -rise_from [get_clocks {sys_clk}] -fall_to [get_clocks {sys_clk}]  0.100  
 # set_clock_uncertainty -rise_from [get_clocks {sys_clk}] -rise_to [get_clocks {sysClk}]  0.500  
@@ -88,9 +88,10 @@ set_clock_uncertainty -fall_from [get_clocks {sysClk}] -fall_to [get_clocks {sys
 # Set Input Delay
 #**************************************************************
 
+set_input_delay -add_delay  -clock [get_clocks {altera_reserved_tck}]  2.000 [get_ports {altera_reserved_tdi}]
+set_input_delay -add_delay  -clock [get_clocks {altera_reserved_tck}]  2.000 [get_ports {altera_reserved_tms}]
+
 set_input_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {aIn}]
-# set_input_delay -add_delay  -clock [get_clocks {sys_clk}]  2.000 [get_ports {altera_reserved_tdi}]
-# set_input_delay -add_delay  -clock [get_clocks {sys_clk}]  2.000 [get_ports {altera_reserved_tms}]
 set_input_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {bIn}]
 
 set_input_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {dclk}]
@@ -128,13 +129,14 @@ set_input_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {jtag
 set_input_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {jtag_trst_i}]
 
 set_input_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {dbg_rxd_i}]
+set_input_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {rem_rxd_i}]
 set_input_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {rstn_i}]
 
 #**************************************************************
 # Set Output Delay
 #**************************************************************
 
-# set_output_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {altera_reserved_tdo}]
+set_output_delay -add_delay  -clock [get_clocks {altera_reserved_tck}]  2.000 [get_ports {altera_reserved_tdo}]
 # set_output_delay -add_delay  -clock [get_clocks {sys_clk}]  2.000 [get_ports {anode[0]}]
 # set_output_delay -add_delay  -clock [get_clocks {sys_clk}]  2.000 [get_ports {anode[1]}]
 # set_output_delay -add_delay  -clock [get_clocks {sys_clk}]  2.000 [get_ports {anode[2]}]
@@ -254,6 +256,7 @@ set_output_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {xDo
 set_output_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {zDoneInt}]
 
 set_output_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {dbg_txd_o}]
+set_output_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {rem_txd_o}]
 set_output_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {jtag_tdo_o}]
 
 #**************************************************************
