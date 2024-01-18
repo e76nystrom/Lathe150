@@ -112,8 +112,9 @@ set_input_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {pinI
 set_input_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {pinIn[11]}]
 set_input_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {pinIn[12]}]
 
-set_input_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {syncIn}]
 # set_input_delay -add_delay  -clock [get_clocks {sys_clk}]  2.000 [get_ports {sysClk}]
+
+set_input_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {syncIn}]
 set_input_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {xDro[0]}]
 set_input_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {xDro[1]}]
 set_input_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {xMpg[0]}]
@@ -193,6 +194,7 @@ set_output_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {ano
 set_output_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {anode[1]}]
 set_output_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {anode[2]}]
 set_output_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {anode[3]}]
+
 set_output_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {aux[0]}]
 set_output_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {aux[1]}]
 set_output_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {aux[2]}]
@@ -201,10 +203,12 @@ set_output_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {aux
 set_output_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {aux[5]}]
 set_output_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {aux[6]}]
 set_output_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {aux[7]}]
+
 set_output_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {bufOut[0]}]
 set_output_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {bufOut[1]}]
 set_output_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {bufOut[2]}]
 set_output_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {bufOut[3]}]
+
 set_output_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {dbg[0]}]
 set_output_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {dbg[1]}]
 set_output_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {dbg[2]}]
@@ -213,12 +217,21 @@ set_output_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {dbg
 set_output_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {dbg[5]}]
 set_output_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {dbg[6]}]
 set_output_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {dbg[7]}]
+
+set_output_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {xout[0]}]
+set_output_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {xout[1]}]
+set_output_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {xout[2]}]
+set_output_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {xout[3]}]
+
 set_output_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {dout}]
+
 set_output_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {extOut[0]}]
 set_output_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {extOut[1]}]
 set_output_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {extOut[2]}]
+
 set_output_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {led[0]}]
 set_output_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {led[1]}]
+set_output_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {ledX}]
 
 # set_output_delay -add_delay  -clock [get_clocks {sys_clk}]  2.000 [get_ports {led[2]}]
 # set_output_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {led[2]}]
@@ -245,6 +258,7 @@ set_output_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {pin
 set_output_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {pinOut[9]}]
 set_output_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {pinOut[10]}]
 set_output_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {pinOut[11]}]
+
 set_output_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {seg[0]}]
 set_output_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {seg[1]}]
 set_output_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {seg[2]}]
@@ -252,6 +266,7 @@ set_output_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {seg
 set_output_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {seg[4]}]
 set_output_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {seg[5]}]
 set_output_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {seg[6]}]
+
 set_output_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {xDoneInt}]
 set_output_delay -add_delay  -clock [get_clocks {sysClk}]  2.000 [get_ports {zDoneInt}]
 

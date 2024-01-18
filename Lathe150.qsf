@@ -62,6 +62,7 @@ set_location_assignment PIN_B14 -to sysClk
 
 set_location_assignment PIN_A24 -to led[0]
 set_location_assignment PIN_A25 -to led[1]
+set_location_assignment PIN_A6 -to ledX
 
 # keys
 
@@ -138,6 +139,13 @@ set_location_assignment PIN_C13 -to dbg[4]
 set_location_assignment PIN_B13 -to dbg[5]
 set_location_assignment PIN_C15 -to dbg[6]
 set_location_assignment PIN_C14 -to dbg[7]
+
+# output pins
+
+set_location_assignment PIN_AD14 -to xout[0]
+set_location_assignment PIN_AC14 -to xout[1]
+set_location_assignment PIN_AD15 -to xout[2]
+set_location_assignment PIN_AC15 -to xout[3]
 
 # aux outputs
 
@@ -235,6 +243,8 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to led[0]
 set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to led[0]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to led[1]
 set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to led[1]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to ledX
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to ledX
 
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to rstn_i
 
@@ -252,7 +262,6 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to jtag_trst_i
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to jtag_tdo_o
 set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to jtag_tdo_o
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to jtag_tck_i
-
 
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to dsel
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to dclk
@@ -294,6 +303,15 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to dbg[6]
 set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to dbg[6]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to dbg[7]
 set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to dbg[7]
+
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to xout[0]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to xout[0]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to xout[1]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to xout[1]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to xout[2]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to xout[2]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to xout[3]
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to xout[3]
 
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to aux[0]
 set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to aux[0]
@@ -416,7 +434,6 @@ set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_STATE_BITS=11" -s
 set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_BUFFER_FULL_STOP=1" -section_id auto_signaltap_0
 set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_CURRENT_RESOURCE_WIDTH=1" -section_id auto_signaltap_0
 #set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INCREMENTAL_ROUTING=1" -section_id auto_signaltap_0
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[23] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
 set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_LEVEL=1" -section_id auto_signaltap_0
 set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_IN_ENABLED=0" -section_id auto_signaltap_0
 set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_PIPELINE=0" -section_id auto_signaltap_0
@@ -426,19 +443,42 @@ set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_ADVANCED_TRIGGER_
 set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_LEVEL_PIPELINE=1" -section_id auto_signaltap_0
 set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_ENABLE_ADVANCED_TRIGGER=0" -section_id auto_signaltap_0
 set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT acq_clk -to "Clock:pllClock|SystemClk:sysClk|SystemClk_altclkctrl_0:altclkctrl_0|SystemClk_altclkctrl_0_sub:SystemClk_altclkctrl_0_sub_component|wire_clkctrl1_outclk" -section_id auto_signaltap_0
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[7] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[27] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[11] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[26] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[12] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[30] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
 set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INCREMENTAL_ROUTING=1" -section_id auto_signaltap_0
 set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[0] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[3] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[6] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[5] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
 set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[10] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[13] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[28] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
+# set_global_assignment -name QIP_FILE ../LatheNew/Proj/CmpTmrMem2.qip
+# set_global_assignment -name QIP_FILE ../LatheNew/Proj/CMem.qip
+# set_global_assignment -name QIP_FILE ../LatheNew/Proj/RdMem.qip
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[26] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[28] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[31] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[16] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[3] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[0] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|Axis:z_Axis|axisEna" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[1] -to ledX -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[0] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|Axis:z_Axis|axisEna" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[1] -to ledX -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_SEGMENT_SIZE=2048" -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[1] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[17] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[20] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[23] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[25] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[27] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[29] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_SAMPLE_DEPTH=2048" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[2] -to "neorv32_top:neorv32_top_inst|neorv32_bus_io_switch:\\io_system:neorv32_bus_io_switch_inst|dev_20_req_o.ben[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[3] -to "neorv32_top:neorv32_top_inst|neorv32_bus_io_switch:\\io_system:neorv32_bus_io_switch_inst|dev_20_req_o.ben[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[4] -to "neorv32_top:neorv32_top_inst|neorv32_bus_io_switch:\\io_system:neorv32_bus_io_switch_inst|dev_20_req_o.ben[2]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[5] -to "neorv32_top:neorv32_top_inst|neorv32_bus_io_switch:\\io_system:neorv32_bus_io_switch_inst|dev_20_req_o.ben[3]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[6] -to "neorv32_top:neorv32_top_inst|neorv32_cfs:\\io_system:neorv32_cfs_inst_true:neorv32_cfs_inst|cfs_we_o" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[2] -to "neorv32_top:neorv32_top_inst|neorv32_bus_io_switch:\\io_system:neorv32_bus_io_switch_inst|dev_20_req_o.ben[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[3] -to "neorv32_top:neorv32_top_inst|neorv32_bus_io_switch:\\io_system:neorv32_bus_io_switch_inst|dev_20_req_o.ben[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[4] -to "neorv32_top:neorv32_top_inst|neorv32_bus_io_switch:\\io_system:neorv32_bus_io_switch_inst|dev_20_req_o.ben[2]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[5] -to "neorv32_top:neorv32_top_inst|neorv32_bus_io_switch:\\io_system:neorv32_bus_io_switch_inst|dev_20_req_o.ben[3]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[6] -to "neorv32_top:neorv32_top_inst|neorv32_cfs:\\io_system:neorv32_cfs_inst_true:neorv32_cfs_inst|cfs_we_o" -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[7] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
 set_global_assignment -name VHDL_FILE ../LatheNew/VHDL/RegDef.vhd
 set_global_assignment -name VHDL_FILE ../LatheNew/VHDL/ExtDataRec.vhd
 set_global_assignment -name VHDL_FILE ../LatheNew/VHDL/IORecord.vhd
@@ -447,9 +487,6 @@ set_global_assignment -name VHDL_FILE ../LatheNew/VHDL/FpgaLatheBits.vhd
 set_global_assignment -name VHDL_FILE ../LatheNew/VHDL/FpgaLatheRec.vhd
 set_global_assignment -name VHDL_FILE ../LatheNew/VHDL/FpgaLatheFunc.vhd
 set_global_assignment -name QSYS_FILE ../LatheNew/Proj/SystemClk.qsys
-# set_global_assignment -name QIP_FILE ../LatheNew/Proj/CmpTmrMem2.qip
-# set_global_assignment -name QIP_FILE ../LatheNew/Proj/CMem.qip
-# set_global_assignment -name QIP_FILE ../LatheNew/Proj/RdMem.qip
 set_global_assignment -name VHDL_FILE ../LatheNew/VHDL/DoutDelay.vhd
 set_global_assignment -name VHDL_FILE ../LatheNew/VHDL/DbgMap.vhd
 set_global_assignment -name VHDL_FILE ../Encoder/VHDL/Display.vhd
@@ -459,7 +496,7 @@ set_global_assignment -name VHDL_FILE ../LatheNew/VHDL/ShiftOpSel.vhd
 set_global_assignment -name VHDL_FILE ../LatheNew/VHDL/ShiftOutN.vhd
 set_global_assignment -name VHDL_FILE ../LatheNew/VHDL/ShiftOutNS.vhd
 set_global_assignment -name VHDL_FILE ../Encoder/VHDL/CmpTmrNewMem.vhd
-set_global_assignment -name VHDL_FILE ../Encoder/VHDL/IntTmrNew.vhd
+set_global_assignment -name VHDL_FILE ../Encoder/VHDL/IntTmrNew1.vhd
 set_global_assignment -name VHDL_FILE ../LatheNew/VHDL/SPI.vhd
 set_global_assignment -name VHDL_FILE ../LatheNew/VHDL/PulseGen.vhd
 set_global_assignment -name VHDL_FILE ../LatheNew/VHDL/ClockEnaN.vhd
@@ -475,149 +512,92 @@ set_global_assignment -name VHDL_FILE ../LatheNew/VHDL/Spindle.vhd
 set_global_assignment -name VHDL_FILE ../LatheNew/VHDL/FreqGen.vhd
 set_global_assignment -name VHDL_FILE ../LatheNew/VHDL/FreqGenCtr.vhd
 set_global_assignment -name VHDL_FILE ../LatheNew/VHDL/CtlReg.vhd
-set_global_assignment -name VHDL_FILE ../LatheNew/VHDL/Jog.vhd
 set_global_assignment -name VHDL_FILE ../LatheNew/VHDL/RunOutSync.vhd
 set_global_assignment -name VHDL_FILE ../LatheNew/VHDL/SyncAccelDistNew.vhd
 set_global_assignment -name VHDL_FILE ../LatheNew/VHDL/Axis.vhd
-set_global_assignment -name VHDL_FILE ../LatheNew/neorv32/neorv32_package.vhd -library neorv32
-set_global_assignment -name VHDL_FILE ../LatheNew/neorv32/neorv32_cfs.vhd -library neorv32
+set_global_assignment -name VHDL_FILE ../LatheNew/neorv32New/core/neorv32_package.vhd -library neorv32
+set_global_assignment -name VHDL_FILE ../LatheNew/neorv32New/neorv32_cfs.vhd -library neorv32
 set_global_assignment -name VHDL_FILE ../LatheNew/VHDL/MpgRecord.vhd -library neorv32
 set_global_assignment -name VHDL_FILE ../LatheNew/VHDL/Fifo.vhd -library neorv32
 set_global_assignment -name VHDL_FILE ../LatheNew/VHDL/Mpg.vhd -library neorv32
-set_global_assignment -name VHDL_FILE ../../../neorv32/rtl/core/neorv32_cpu.vhd -library neorv32
-set_global_assignment -name VHDL_FILE ../../../neorv32/rtl/core/neorv32_cpu_alu.vhd -library neorv32
-set_global_assignment -name VHDL_FILE ../../../neorv32/rtl/core/neorv32_cpu_control.vhd -library neorv32
-set_global_assignment -name VHDL_FILE ../../../neorv32/rtl/core/neorv32_cpu_cp_bitmanip.vhd -library neorv32
-set_global_assignment -name VHDL_FILE ../../../neorv32/rtl/core/neorv32_cpu_cp_cfu.vhd -library neorv32
-set_global_assignment -name VHDL_FILE ../../../neorv32/rtl/core/neorv32_cpu_cp_fpu.vhd -library neorv32
-set_global_assignment -name VHDL_FILE ../../../neorv32/rtl/core/neorv32_cpu_cp_muldiv.vhd -library neorv32
-set_global_assignment -name VHDL_FILE ../../../neorv32/rtl/core/neorv32_cpu_cp_shifter.vhd -library neorv32
-set_global_assignment -name VHDL_FILE ../../../neorv32/rtl/core/neorv32_cpu_decompressor.vhd -library neorv32
-set_global_assignment -name VHDL_FILE ../../../neorv32/rtl/core/neorv32_cpu_lsu.vhd -library neorv32
-set_global_assignment -name VHDL_FILE ../../../neorv32/rtl/core/neorv32_cpu_pmp.vhd -library neorv32
-set_global_assignment -name VHDL_FILE ../../../neorv32/rtl/core/neorv32_cpu_regfile.vhd -library neorv32
-set_global_assignment -name VHDL_FILE ../../../neorv32/rtl/core/neorv32_crc.vhd -library neorv32
-set_global_assignment -name VHDL_FILE ../../../neorv32/rtl/core/neorv32_dcache.vhd -library neorv32
-set_global_assignment -name VHDL_FILE ../../../neorv32/rtl/core/neorv32_debug_dm.vhd -library neorv32
-set_global_assignment -name VHDL_FILE ../../../neorv32/rtl/core/neorv32_debug_dtm.vhd -library neorv32
-set_global_assignment -name VHDL_FILE ../../../neorv32/rtl/core/neorv32_dma.vhd -library neorv32
-set_global_assignment -name VHDL_FILE ../../../neorv32/rtl/core/neorv32_fifo.vhd -library neorv32
-set_global_assignment -name VHDL_FILE ../../../neorv32/rtl/core/neorv32_gpio.vhd -library neorv32
-set_global_assignment -name VHDL_FILE ../../../neorv32/rtl/core/neorv32_gptmr.vhd -library neorv32
-set_global_assignment -name VHDL_FILE ../../../neorv32/rtl/core/neorv32_icache.vhd -library neorv32
-set_global_assignment -name VHDL_FILE ../../../neorv32/rtl/core/neorv32_intercon.vhd -library neorv32
-set_global_assignment -name VHDL_FILE ../../../neorv32/rtl/core/neorv32_mtime.vhd -library neorv32
-set_global_assignment -name VHDL_FILE ../../../neorv32/rtl/core/neorv32_neoled.vhd -library neorv32
-set_global_assignment -name VHDL_FILE ../../../neorv32/rtl/core/neorv32_onewire.vhd -library neorv32
-set_global_assignment -name VHDL_FILE ../../../neorv32/rtl/core/neorv32_pwm.vhd -library neorv32
-set_global_assignment -name VHDL_FILE ../../../neorv32/rtl/core/neorv32_sdi.vhd -library neorv32
-set_global_assignment -name VHDL_FILE ../../../neorv32/rtl/core/neorv32_slink.vhd -library neorv32
-set_global_assignment -name VHDL_FILE ../../../neorv32/rtl/core/neorv32_spi.vhd -library neorv32
-set_global_assignment -name VHDL_FILE ../../../neorv32/rtl/core/neorv32_sysinfo.vhd -library neorv32
-set_global_assignment -name VHDL_FILE ../../../neorv32/rtl/core/neorv32_trng.vhd -library neorv32
-set_global_assignment -name VHDL_FILE ../../../neorv32/rtl/core/neorv32_twi.vhd -library neorv32
-set_global_assignment -name VHDL_FILE ../../../neorv32/rtl/core/neorv32_uart.vhd -library neorv32
-set_global_assignment -name VHDL_FILE ../../../neorv32/rtl/core/neorv32_wdt.vhd -library neorv32
-set_global_assignment -name VHDL_FILE ../../../neorv32/rtl/core/neorv32_wishbone.vhd -library neorv32
-set_global_assignment -name VHDL_FILE ../../../neorv32/rtl/core/neorv32_xip.vhd -library neorv32
-set_global_assignment -name VHDL_FILE ../../../neorv32/rtl/core/neorv32_xirq.vhd -library neorv32
-set_global_assignment -name VHDL_FILE ../../../neorv32/rtl/core/neorv32_imem.entity.vhd -library neorv32
-set_global_assignment -name VHDL_FILE ../../../neorv32/rtl/core/neorv32_dmem.entity.vhd -library neorv32
-set_global_assignment -name VHDL_FILE ../../../neorv32/rtl/core/neorv32_application_image.vhd -library neorv32
-set_global_assignment -name VHDL_FILE ../../../neorv32/rtl/core/neorv32_bootloader_image.vhd -library neorv32
-set_global_assignment -name VHDL_FILE ../../../neorv32/rtl/core/neorv32_boot_rom.vhd -library neorv32
-set_global_assignment -name VHDL_FILE ../../../neorv32/rtl/core/mem/neorv32_imem.default.vhd -library neorv32
-set_global_assignment -name VHDL_FILE ../../../neorv32/rtl/core/mem/neorv32_dmem.default.vhd -library neorv32
-set_global_assignment -name VHDL_FILE ../LatheNew/neorv32/neorv32_top.vhd
+set_global_assignment -name VHDL_FILE ../LatheNew/neorv32New/core/neorv32_cpu.vhd -library neorv32
+set_global_assignment -name VHDL_FILE ../LatheNew/neorv32New/core/neorv32_cpu_alu.vhd -library neorv32
+set_global_assignment -name VHDL_FILE ../LatheNew/neorv32New/core/neorv32_cpu_control.vhd -library neorv32
+set_global_assignment -name VHDL_FILE ../LatheNew/neorv32New/core/neorv32_cpu_cp_bitmanip.vhd -library neorv32
+set_global_assignment -name VHDL_FILE ../LatheNew/neorv32New/core/neorv32_cpu_cp_cfu.vhd -library neorv32
+set_global_assignment -name VHDL_FILE ../LatheNew/neorv32New/core/neorv32_cpu_cp_cond.vhd -library neorv32
+set_global_assignment -name VHDL_FILE ../LatheNew/neorv32New/core/neorv32_cpu_cp_fpu.vhd -library neorv32
+set_global_assignment -name VHDL_FILE ../LatheNew/neorv32New/core/neorv32_cpu_cp_muldiv.vhd -library neorv32
+set_global_assignment -name VHDL_FILE ../LatheNew/neorv32New/core/neorv32_cpu_cp_shifter.vhd -library neorv32
+set_global_assignment -name VHDL_FILE ../LatheNew/neorv32New/core/neorv32_cpu_decompressor.vhd -library neorv32
+set_global_assignment -name VHDL_FILE ../LatheNew/neorv32New/core/neorv32_cpu_lsu.vhd -library neorv32
+set_global_assignment -name VHDL_FILE ../LatheNew/neorv32New/core/neorv32_cpu_pmp.vhd -library neorv32
+set_global_assignment -name VHDL_FILE ../LatheNew/neorv32New/core/neorv32_cpu_regfile.vhd -library neorv32
+set_global_assignment -name VHDL_FILE ../LatheNew/neorv32New/core/neorv32_crc.vhd -library neorv32
+set_global_assignment -name VHDL_FILE ../LatheNew/neorv32New/core/neorv32_dcache.vhd -library neorv32
+set_global_assignment -name VHDL_FILE ../LatheNew/neorv32New/core/neorv32_debug_dm.vhd -library neorv32
+set_global_assignment -name VHDL_FILE ../LatheNew/neorv32New/core/neorv32_debug_dtm.vhd -library neorv32
+set_global_assignment -name VHDL_FILE ../LatheNew/neorv32New/core/neorv32_dma.vhd -library neorv32
+set_global_assignment -name VHDL_FILE ../LatheNew/neorv32New/core/neorv32_fifo.vhd -library neorv32
+set_global_assignment -name VHDL_FILE ../LatheNew/neorv32New/core/neorv32_gpio.vhd -library neorv32
+set_global_assignment -name VHDL_FILE ../LatheNew/neorv32New/core/neorv32_gptmr.vhd -library neorv32
+set_global_assignment -name VHDL_FILE ../LatheNew/neorv32New/core/neorv32_icache.vhd -library neorv32
+set_global_assignment -name VHDL_FILE ../LatheNew/neorv32New/core/neorv32_intercon.vhd -library neorv32
+set_global_assignment -name VHDL_FILE ../LatheNew/neorv32New/core/neorv32_mtime.vhd -library neorv32
+set_global_assignment -name VHDL_FILE ../LatheNew/neorv32New/core/neorv32_neoled.vhd -library neorv32
+set_global_assignment -name VHDL_FILE ../LatheNew/neorv32New/core/neorv32_onewire.vhd -library neorv32
+set_global_assignment -name VHDL_FILE ../LatheNew/neorv32New/core/neorv32_pwm.vhd -library neorv32
+set_global_assignment -name VHDL_FILE ../LatheNew/neorv32New/core/neorv32_sdi.vhd -library neorv32
+set_global_assignment -name VHDL_FILE ../LatheNew/neorv32New/core/neorv32_slink.vhd -library neorv32
+set_global_assignment -name VHDL_FILE ../LatheNew/neorv32New/core/neorv32_spi.vhd -library neorv32
+set_global_assignment -name VHDL_FILE ../LatheNew/neorv32New/core/neorv32_sysinfo.vhd -library neorv32
+set_global_assignment -name VHDL_FILE ../LatheNew/neorv32New/core/neorv32_trng.vhd -library neorv32
+set_global_assignment -name VHDL_FILE ../LatheNew/neorv32New/core/neorv32_twi.vhd -library neorv32
+set_global_assignment -name VHDL_FILE ../LatheNew/neorv32New/core/neorv32_uart.vhd -library neorv32
+set_global_assignment -name VHDL_FILE ../LatheNew/neorv32New/core/neorv32_wdt.vhd -library neorv32
+set_global_assignment -name VHDL_FILE ../LatheNew/neorv32New/core/neorv32_wishbone.vhd -library neorv32
+set_global_assignment -name VHDL_FILE ../LatheNew/neorv32New/core/neorv32_xip.vhd -library neorv32
+set_global_assignment -name VHDL_FILE ../LatheNew/neorv32New/core/neorv32_xirq.vhd -library neorv32
+set_global_assignment -name VHDL_FILE ../LatheNew/neorv32New/core/neorv32_imem.entity.vhd -library neorv32
+set_global_assignment -name VHDL_FILE ../LatheNew/neorv32New/core/neorv32_dmem.entity.vhd -library neorv32
+set_global_assignment -name VHDL_FILE ../LatheNew/neorv32New/core/neorv32_application_image.vhd -library neorv32
+set_global_assignment -name VHDL_FILE ../LatheNew/neorv32New/core/neorv32_bootloader_image.vhd -library neorv32
+set_global_assignment -name VHDL_FILE ../LatheNew/neorv32New/core/neorv32_boot_rom.vhd -library neorv32
+set_global_assignment -name VHDL_FILE ../LatheNew/neorv32New/core/mem/neorv32_imem.default.vhd -library neorv32
+set_global_assignment -name VHDL_FILE ../LatheNew/neorv32New/core/mem/neorv32_dmem.default.vhd -library neorv32
 set_global_assignment -name VHDL_FILE ../LatheNew/VHDL/LatheCtl.vhd
 set_global_assignment -name VHDL_FILE ../LatheNew/VHDL/Interface.vhd
+set_global_assignment -name VHDL_FILE ../LatheNew/neorv32New/neorv32_top.vhd
 set_global_assignment -name VHDL_FILE ../LatheNew/VHDL/LatheInterface.vhd
 set_global_assignment -name VHDL_FILE ../LatheNew/VHDL/LatheTopCore150.vhd
 set_global_assignment -name SDC_FILE Lathe150.sdc
 set_global_assignment -name SIGNALTAP_FILE stp1.stp
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[14] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[17] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[7] -to "neorv32_top:neorv32_top_inst|neorv32_neoled:\\io_system:neorv32_neoled_inst_true:neorv32_neoled_inst|serial.state[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[8] -to "neorv32_top:neorv32_top_inst|neorv32_neoled:\\io_system:neorv32_neoled_inst_true:neorv32_neoled_inst|serial.state[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[9] -to "neorv32_top:neorv32_top_inst|neorv32_neoled:\\io_system:neorv32_neoled_inst_true:neorv32_neoled_inst|serial.state[2]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[7] -to "neorv32_top:neorv32_top_inst|neorv32_neoled:\\io_system:neorv32_neoled_inst_true:neorv32_neoled_inst|serial.state[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[8] -to "neorv32_top:neorv32_top_inst|neorv32_neoled:\\io_system:neorv32_neoled_inst_true:neorv32_neoled_inst|serial.state[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[9] -to "neorv32_top:neorv32_top_inst|neorv32_neoled:\\io_system:neorv32_neoled_inst_true:neorv32_neoled_inst|serial.state[2]" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_DATA_BITS=10" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_BITS=10" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_STORAGE_QUALIFIER_BITS=10" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK=0000000000000000000000000000000000000000000000000000000" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK_LENGTH=55" -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[2] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[4] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[6] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[8] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[9] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[11] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[12] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[13] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[14] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[15] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
 set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[18] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[19] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
 set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[21] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
 set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[22] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[31] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[2] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[5] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[15] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[16] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[20] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
 set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[24] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[1] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[4] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[9] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[25] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[8] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[0] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|Axis:x_Axis|SyncAccelDist:AxisSyncAccel|axisCtl.ctlChDirect" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[1] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|Axis:x_Axis|SyncAccelDist:AxisSyncAccel|ena" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[2] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|Axis:x_Axis|SyncAccelDist:AxisSyncAccel|syncState.chDirect" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[3] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|Axis:x_Axis|SyncAccelDist:AxisSyncAccel|syncState.enabled" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[4] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|Axis:x_Axis|SyncAccelDist:AxisSyncAccel|syncState.syncIdle" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[0] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|Axis:x_Axis|SyncAccelDist:AxisSyncAccel|axisCtl.ctlChDirect" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[1] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|Axis:x_Axis|SyncAccelDist:AxisSyncAccel|ena" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[2] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|Axis:x_Axis|SyncAccelDist:AxisSyncAccel|syncState.chDirect" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[3] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|Axis:x_Axis|SyncAccelDist:AxisSyncAccel|syncState.enabled" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[4] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|Axis:x_Axis|SyncAccelDist:AxisSyncAccel|syncState.syncIdle" -section_id auto_signaltap_0
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[19] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_SEGMENT_SIZE=65536" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_SAMPLE_DEPTH=65536" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[5] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|Axis:x_Axis|ch" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[6] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|Axis:z_Axis|axisEna" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[7] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|Axis:z_Axis|runState.synWait" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[8] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|Axis:z_Axis|sync" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[9] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|Encoder:encoderProc|intclk" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[10] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|RunOutSync:RunOut_Ctl|counter[0]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[11] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|RunOutSync:RunOut_Ctl|counter[1]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[12] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|RunOutSync:RunOut_Ctl|counter[2]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[13] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|RunOutSync:RunOut_Ctl|counter[3]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[14] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|RunOutSync:RunOut_Ctl|counter[4]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[15] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|RunOutSync:RunOut_Ctl|counter[5]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[16] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|RunOutSync:RunOut_Ctl|counter[6]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[17] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|RunOutSync:RunOut_Ctl|counter[7]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[18] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|RunOutSync:RunOut_Ctl|limit[0]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[19] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|RunOutSync:RunOut_Ctl|limit[1]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[20] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|RunOutSync:RunOut_Ctl|limit[2]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[21] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|RunOutSync:RunOut_Ctl|limit[3]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[22] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|RunOutSync:RunOut_Ctl|limit[4]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[23] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|RunOutSync:RunOut_Ctl|limit[5]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[24] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|RunOutSync:RunOut_Ctl|limit[6]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[25] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|RunOutSync:RunOut_Ctl|limit[7]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[26] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|RunOutSync:RunOut_Ctl|rEnable" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[27] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|RunOutSync:RunOut_Ctl|runOutEna" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[28] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|RunOutSync:RunOut_Ctl|step" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[5] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|Axis:x_Axis|ch" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[6] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|Axis:z_Axis|axisEna" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[7] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|Axis:z_Axis|runState.synWait" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[8] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|Axis:z_Axis|sync" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[9] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|Encoder:encoderProc|intclk" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[10] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|RunOutSync:RunOut_Ctl|counter[0]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[11] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|RunOutSync:RunOut_Ctl|counter[1]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[12] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|RunOutSync:RunOut_Ctl|counter[2]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[13] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|RunOutSync:RunOut_Ctl|counter[3]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[14] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|RunOutSync:RunOut_Ctl|counter[4]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[15] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|RunOutSync:RunOut_Ctl|counter[5]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[16] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|RunOutSync:RunOut_Ctl|counter[6]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[17] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|RunOutSync:RunOut_Ctl|counter[7]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[18] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|RunOutSync:RunOut_Ctl|limit[0]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[19] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|RunOutSync:RunOut_Ctl|limit[1]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[20] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|RunOutSync:RunOut_Ctl|limit[2]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[21] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|RunOutSync:RunOut_Ctl|limit[3]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[22] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|RunOutSync:RunOut_Ctl|limit[4]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[23] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|RunOutSync:RunOut_Ctl|limit[5]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[24] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|RunOutSync:RunOut_Ctl|limit[6]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[25] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|RunOutSync:RunOut_Ctl|limit[7]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[26] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|RunOutSync:RunOut_Ctl|rEnable" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[27] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|RunOutSync:RunOut_Ctl|runOutEna" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[28] -to "LatheInterface:latheInt|LatheCtl:latheCtlProc|RunOutSync:RunOut_Ctl|step" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_DATA_BITS=29" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_BITS=29" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_STORAGE_QUALIFIER_BITS=29" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK=000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK_LENGTH=117" -section_id auto_signaltap_0
-set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[29] -to auto_signaltap_0|gnd -section_id auto_signaltap_0
+set_instance_assignment -name POST_FIT_CONNECT_TO_SLD_NODE_ENTITY_PORT crc[30] -to auto_signaltap_0|vcc -section_id auto_signaltap_0
 set_global_assignment -name SLD_FILE db/stp1_auto_stripped.stp
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
